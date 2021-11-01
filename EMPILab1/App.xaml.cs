@@ -1,16 +1,18 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Prism;
+using Prism.Ioc;
+using Prism.Unity;
 
 namespace EMPILab1
 {
-    public partial class App : Application
+    public partial class App : PrismApplication
     {
-        public App()
+        public App(IPlatformInitializer initializer = null) : base(initializer) { }
+
+        protected override async void OnInitialized()
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            await NavigationService.NavigateAsync(nameof(MainPage));
         }
 
         protected override void OnStart()
@@ -23,6 +25,11 @@ namespace EMPILab1
 
         protected override void OnResume()
         {
+        }
+
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterForNavigation<MainPage>();
         }
     }
 }
