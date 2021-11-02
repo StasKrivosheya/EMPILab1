@@ -1,4 +1,6 @@
 ﻿using Foundation;
+using Prism;
+using Prism.Ioc;
 using UIKit;
 
 namespace EMPILab1.iOS
@@ -19,9 +21,19 @@ namespace EMPILab1.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+
+            Syncfusion.SfChart.XForms.iOS.Renderers.SfChartRenderer.Init();
+
+            LoadApplication(new App(new AndroidInitializer()));
 
             return base.FinishedLaunching(app, options);
+        }
+
+        public class AndroidInitializer : IPlatformInitializer
+        {
+            public void RegisterTypes(IContainerRegistry containerRegistry)
+            {
+            }
         }
     }
 }

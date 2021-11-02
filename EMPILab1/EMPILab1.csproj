@@ -11,7 +11,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
+    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="19.3.0.43" />
+    <PackageReference Include="Syncfusion.Xamarin.SfAutoComplete" Version="19.3.0.43" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Prism.Unity.Forms" />
+    <None Remove="Syncfusion.Xamarin.SfChart" />
+    <None Remove="Pages\" />
+    <None Remove="ViewModels\" />
+    <None Remove="Models\" />
+    <None Remove="Syncfusion.Xamarin.SfAutoComplete" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

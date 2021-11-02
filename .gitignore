@@ -417,3 +417,6 @@ ASALocalRun/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# CUSTOM
+SecretConstants.cs
