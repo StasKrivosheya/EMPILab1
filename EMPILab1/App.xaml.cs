@@ -1,6 +1,9 @@
-﻿using Prism;
+﻿using EMPILab1.ViewModels;
+using EMPILab1.Pages;
+using Prism;
 using Prism.Ioc;
 using Prism.Unity;
+using Xamarin.Forms;
 
 namespace EMPILab1
 {
@@ -10,9 +13,11 @@ namespace EMPILab1
 
         protected override async void OnInitialized()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(SecretConstants.SYNCFUSION_LICENSE_KEY);
+
             InitializeComponent();
 
-            await NavigationService.NavigateAsync(nameof(MainPage));
+            await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MainPage)}");
         }
 
         protected override void OnStart()
@@ -29,7 +34,8 @@ namespace EMPILab1
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<MainPage>();
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
         }
     }
 }

@@ -22,6 +22,8 @@ namespace EMPILab1.iOS
         {
             global::Xamarin.Forms.Forms.Init();
 
+            Syncfusion.SfChart.XForms.iOS.Renderers.SfChartRenderer.Init();
+
             LoadApplication(new App(new AndroidInitializer()));
 
             return base.FinishedLaunching(app, options);
