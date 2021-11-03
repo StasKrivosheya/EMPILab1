@@ -1,30 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
+             xmlns:converters="clr-namespace:EMPILab1.Converters"
              x:Class="EMPILab1.Pages.MainPage"
-             Title="Main Page">
+             Title="Главная">
 
-   <Grid>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-       <chart:SfChart>
-			
-			<chart:SfChart.PrimaryAxis>
-				<chart:CategoryAxis/>
-			</chart:SfChart.PrimaryAxis>
- 
-			<chart:SfChart.SecondaryAxis>
-				<chart:NumericalAxis/>
-			</chart:SfChart.SecondaryAxis>
- 
-			<chart:AreaSeries ItemsSource="{Binding AreaData}" XBindingPath="Month" YBindingPath="Target"/>
- 
-			<chart:ColumnSeries ItemsSource="{Binding ColumnData}" XBindingPath="Month" YBindingPath="Target"/>
- 
-		</chart:SfChart>
 
-   </Grid>
+   <StackLayout Padding="20">
+
+       <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
+              IsVisible="{Binding IsFileSelected}"
+              HorizontalOptions="CenterAndExpand"
+              TextColor="DarkGreen"/>
+
+       <Label Text="Файл не выбран"
+              IsVisible="{Binding IsFileSelected, Converter={StaticResource InverseBooleanConverter}}"
+              HorizontalOptions="CenterAndExpand"
+              TextColor="DarkRed"/>
+
+       <Button Text="Загрузить файл"
+               HorizontalOptions="Center"
+               BackgroundColor="WhiteSmoke"
+               BorderColor="DarkGreen"
+               TextColor="Black"
+               FontAttributes="Bold"
+               BorderWidth="1"
+               Margin="20"
+               Padding="10"
+               Command="{Binding LoadFileCommand}" />
+
+   </StackLayout>
 
 </ContentPage>
