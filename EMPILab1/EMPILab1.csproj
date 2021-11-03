@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,10 +25,13 @@
     <None Remove="ViewModels\" />
     <None Remove="Models\" />
     <None Remove="Syncfusion.Xamarin.SfAutoComplete" />
+    <None Remove="Syncfusion.XlsIO.Net.Core" />
+    <None Remove="Converters\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Models\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
 </Project>
