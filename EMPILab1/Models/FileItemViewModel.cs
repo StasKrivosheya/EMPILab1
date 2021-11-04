@@ -13,8 +13,8 @@ namespace EMPILab1.Models
             set => SetProperty(ref _fileName, value);
         }
 
-        private string _fileContent;
-        public string FileContent
+        private string[] _fileContent;
+        public string[] FileContent
         {
             get => _fileContent;
             set => SetProperty(ref _fileContent, value);

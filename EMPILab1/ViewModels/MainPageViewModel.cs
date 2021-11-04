@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using EMPILab1.Models;
 using Prism.Commands;
@@ -31,6 +33,13 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _isFileSelected, value);
         }
 
+        private ObservableCollection<VariantItemViewModel> _variants;
+        public ObservableCollection<VariantItemViewModel> Variants
+        {
+            get => _variants;
+            set => SetProperty(ref _variants, value);
+        }
+
         private ICommand _LoadFileCommand;
         public ICommand LoadFileCommand => _LoadFileCommand ??= new DelegateCommand(async () => await OnLoadFileCommandAync());
 
@@ -61,11 +70,39 @@ namespace EMPILab1.ViewModels
                 SelectedFile = new FileItemViewModel
                 {
                     FileName = pickedFile.FileName,
-                    FileContent = System.IO.File.ReadAllText(pickedFile.FullPath),
+                    FileContent = System.IO.File.ReadAllLines(pickedFile.FullPath),
                 };
+
+                CalculateModels();
 
                 IsFileSelected = true;
             }
+        }
+
+        private void CalculateModels()
+        {
+            var variantsList = new List<VariantItemViewModel>();
+
+            int index = 1;
+
+            foreach (var str in SelectedFile.FileContent)
+            {
+                if (double.TryParse(str, out var num))
+                {
+                    variantsList.Add(new VariantItemViewModel
+                    {
+                        Index = index,
+                        Value = num,
+                        Frequency = 0,
+                        RelativeFrequency = 0,
+                        EmpiricalDistrFuncValue = 0,
+                    });
+                }
+
+                index++;
+            }
+
+            Variants = new ObservableCollection<VariantItemViewModel>(variantsList);
         }
 
         #endregion

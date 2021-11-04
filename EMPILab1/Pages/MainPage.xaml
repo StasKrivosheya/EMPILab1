@@ -13,7 +13,6 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-
    <StackLayout Padding="20">
 
        <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
@@ -36,6 +35,139 @@
                Margin="20"
                Padding="10"
                Command="{Binding LoadFileCommand}" />
+
+       <CollectionView ItemsSource="{Binding Variants}"
+                       IsVisible="{Binding IsFileSelected}">
+
+           <CollectionView.Header>
+
+                <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                      ColumnSpacing="1"
+                      Padding="0"
+                      BackgroundColor="Black">
+
+                    <Label Grid.Column="0"
+                           Text="№"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           BackgroundColor="White"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0, 0, 0, 1"/>
+
+                    <Label Grid.Column="1"
+                           Text="Значение"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           BackgroundColor="White"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0, 0, 0, 1"/>
+
+                    <Label Grid.Column="2"
+                           Text="Частота"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           BackgroundColor="White"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0, 0, 0, 1"/>
+
+                    <Label Grid.Column="3"
+                           Text="Относит. частота"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           BackgroundColor="White"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0, 0, 0, 1"/>
+
+                    <Label Grid.Column="4"
+                           Text="Значение Эмпирической функц. распределения"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           BackgroundColor="White"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0, 0, 2, 1"
+                           Padding="5"/>
+
+                </Grid>
+
+            </CollectionView.Header>
+
+           <CollectionView.ItemTemplate>
+
+               <DataTemplate>
+
+                   <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                         ColumnSpacing="1"
+                         RowSpacing="0"
+                         Padding="0"
+                         BackgroundColor="Black">
+
+                        <Label Grid.Column="0"
+                               Text="{Binding Index}"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               BackgroundColor="White"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="1"
+                               Text="{Binding Value}"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               BackgroundColor="White"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="2"
+                               Text="{Binding Frequency}"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               BackgroundColor="White"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="3"
+                               Text="{Binding RelativeFrequency}"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               BackgroundColor="White"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="4"
+                               Text="{Binding EmpiricalDistrFuncValue}"
+                               FontSize="Medium"
+                               FontAttributes="Bold"
+                               BackgroundColor="White"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0, 0, 2, 1"
+                               Padding="5"/>
+
+                   </Grid>
+
+               </DataTemplate>
+
+           </CollectionView.ItemTemplate>
+
+           <CollectionView.Footer>
+
+               <BoxView VerticalOptions="Start"
+                        HorizontalOptions="FillAndExpand"
+                        HeightRequest="1"
+                        BackgroundColor="Black"/>
+
+           </CollectionView.Footer>
+
+       </CollectionView>
 
    </StackLayout>
 
