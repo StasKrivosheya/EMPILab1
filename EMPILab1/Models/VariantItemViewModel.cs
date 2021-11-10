@@ -20,8 +20,8 @@ namespace EMPILab1.Models
             set => SetProperty(ref _value, value);
         }
 
-        private double _frequency;
-        public double Frequency
+        private int _frequency;
+        public int Frequency
         {
             get => _frequency;
             set => SetProperty(ref _frequency, value);

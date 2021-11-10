@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using EMPILab1.Models;
@@ -81,27 +82,42 @@ namespace EMPILab1.ViewModels
 
         private void CalculateModels()
         {
-            var variantsList = new List<VariantItemViewModel>();
-
-            int index = 1;
+            var valuesList = new List<double>();
 
             foreach (var str in SelectedFile.FileContent)
             {
                 if (double.TryParse(str, out var num))
                 {
-                    variantsList.Add(new VariantItemViewModel
-                    {
-                        Index = index,
-                        Value = num,
-                        Frequency = 0,
-                        RelativeFrequency = 0,
-                        EmpiricalDistrFuncValue = 0,
-                    });
+                    valuesList.Add(num);
                 }
-
-                index++;
             }
 
+            //valuesList = new List<double> { 0.5, 1.2, 1.2, 3, 4, 5, 5, 5, 7.3, 8 };
+
+            valuesList.Sort();
+
+            var uniqueValues = valuesList.GroupBy(v => v);
+
+            var variantsList = new List<VariantItemViewModel>();
+
+            var i = 1;
+            var empiricalDistrFuncValue = 0d;
+            foreach (var group in uniqueValues)
+            {
+                var variant = new VariantItemViewModel
+                {
+                    Index = i,
+                    Value = group.Key,
+                    Frequency = group.Count(),
+                    RelativeFrequency = (double)group.Count() / uniqueValues.Count(),
+                    EmpiricalDistrFuncValue = empiricalDistrFuncValue += (double)group.Count() / uniqueValues.Count(),
+                };
+
+                variantsList.Add(variant);
+
+                ++i;
+            }
+            
             Variants = new ObservableCollection<VariantItemViewModel>(variantsList);
         }
 
