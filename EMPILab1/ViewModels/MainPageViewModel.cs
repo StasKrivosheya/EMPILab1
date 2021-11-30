@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using EMPILab1.Models;
+using EMPILab1.Pages;
 using Prism.Commands;
 using Prism.Navigation;
 using Xamarin.Essentials;
@@ -41,8 +42,11 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _variants, value);
         }
 
-        private ICommand _LoadFileCommand;
-        public ICommand LoadFileCommand => _LoadFileCommand ??= new DelegateCommand(async () => await OnLoadFileCommandAync());
+        private ICommand _loadFileCommand;
+        public ICommand LoadFileCommand => _loadFileCommand ??= new DelegateCommand(async () => await OnLoadFileCommandAsync());
+
+        private ICommand _continueCommand;
+        public ICommand ContinueCommand => _continueCommand ??= new DelegateCommand(async () => await OnContinueCommandAsync());
 
         #endregion
 
@@ -57,7 +61,17 @@ namespace EMPILab1.ViewModels
 
         #region -- Private helpers --
 
-        private async Task OnLoadFileCommandAync()
+        private Task OnContinueCommandAsync()
+        {
+            var prms = new NavigationParameters
+            {
+                { nameof(Variants), Variants }
+            };
+
+            return NavigationService.NavigateAsync(nameof(Page1), prms);
+        }
+
+        private async Task OnLoadFileCommandAsync()
         {
             var options = new PickOptions
             {
@@ -92,7 +106,8 @@ namespace EMPILab1.ViewModels
                 }
             }
 
-            //valuesList = new List<double> { 0.5, 1.2, 1.2, 3, 4, 5, 5, 5, 7.3, 8 };
+            // test
+            // valuesList = new List<double> { 0.5, 1.2, 1.2, 3, 4, 5, 5, 5, 7.3, 8 };
 
             valuesList.Sort();
 
@@ -118,7 +133,7 @@ namespace EMPILab1.ViewModels
                 ++i;
             }
             
-            Variants = new ObservableCollection<VariantItemViewModel>(variantsList);
+            Variants = new(variantsList);
         }
 
         #endregion

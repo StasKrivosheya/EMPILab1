@@ -14,7 +14,7 @@ namespace EMPILab1.ViewModels
 
         #region -- Public Properties --
 
-        private string _title;
+        private string _title = "EMPI Lab 1";
         public string Title
         {
             get => _title;

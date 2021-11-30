@@ -4,6 +4,7 @@
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              xmlns:converters="clr-namespace:EMPILab1.Converters"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              x:Class="EMPILab1.Pages.MainPage"
              Title="Главная">
 
@@ -13,162 +14,217 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-   <StackLayout Padding="20">
+    <ContentPage.Content>
 
-       <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
-              IsVisible="{Binding IsFileSelected}"
-              HorizontalOptions="CenterAndExpand"
-              TextColor="DarkGreen"/>
+        <StackLayout Padding="20">
 
-       <Label Text="Файл не выбран"
-              IsVisible="{Binding IsFileSelected, Converter={StaticResource InverseBooleanConverter}}"
-              HorizontalOptions="CenterAndExpand"
-              TextColor="DarkRed"/>
+            <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
+                   IsVisible="{Binding IsFileSelected}"
+                   HorizontalOptions="CenterAndExpand"
+                   TextColor="DarkGreen"/>
 
-       <Button Text="Загрузить файл"
-               HorizontalOptions="Center"
-               BackgroundColor="WhiteSmoke"
-               BorderColor="DarkGreen"
-               TextColor="Black"
-               FontAttributes="Bold"
-               BorderWidth="1"
-               Margin="20"
-               Padding="10"
-               Command="{Binding LoadFileCommand}" />
+            <Label Text="Файл не выбран"
+                   IsVisible="{Binding IsFileSelected, Converter={StaticResource InverseBooleanConverter}}"
+                   HorizontalOptions="CenterAndExpand"
+                   TextColor="DarkRed"/>
 
-       <CollectionView ItemsSource="{Binding Variants}"
-                       IsVisible="{Binding IsFileSelected}">
+            <Button Text="Загрузить файл"
+                    HorizontalOptions="Center"
+                    BackgroundColor="WhiteSmoke"
+                    BorderColor="DarkGreen"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BorderWidth="1"
+                    Margin="20"
+                    Padding="10"
+                    Command="{Binding LoadFileCommand}" />
 
-           <CollectionView.Header>
+            <CollectionView ItemsSource="{Binding Variants}"
+                            IsVisible="{Binding IsFileSelected}">
 
-                <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
-                      ColumnSpacing="1"
-                      Padding="0"
-                      BackgroundColor="Black">
+                <CollectionView.Header>
 
-                    <Label Grid.Column="0"
-                           Text="№"
-                           FontSize="Medium"
-                           FontAttributes="Bold"
-                           BackgroundColor="White"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"
-                           Margin="0, 0, 0, 1"/>
+                    <StackLayout>
 
-                    <Label Grid.Column="1"
-                           Text="Значение"
-                           FontSize="Medium"
-                           FontAttributes="Bold"
-                           BackgroundColor="White"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"
-                           Margin="0, 0, 0, 1"/>
+                        <chart:SfChart IsVisible="{Binding IsFileSelected}"
+                                       BackgroundColor="#f2f0e9"
+                                       HeightRequest="500">
 
-                    <Label Grid.Column="2"
-                           Text="Частота"
-                           FontSize="Medium"
-                           FontAttributes="Bold"
-                           BackgroundColor="White"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"
-                           Margin="0, 0, 0, 1"/>
+                            <chart:SfChart.Title>
+                                <chart:ChartTitle Text="Графік емпіричної функції розподілу за даними варіаційного ряду"
+                                                  FontAttributes="Bold"
+                                                  Margin="0, 10"/>
+                            </chart:SfChart.Title>
 
-                    <Label Grid.Column="3"
-                           Text="Относит. частота"
-                           FontSize="Medium"
-                           FontAttributes="Bold"
-                           BackgroundColor="White"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"
-                           Margin="0, 0, 0, 1"/>
+                            <chart:SfChart.PrimaryAxis>
+                                <chart:NumericalAxis>
+                                    <chart:NumericalAxis.Title>
+                                        <chart:ChartAxisTitle Text="x"/>
+                                    </chart:NumericalAxis.Title>
+                                </chart:NumericalAxis>
+                            </chart:SfChart.PrimaryAxis>
 
-                    <Label Grid.Column="4"
-                           Text="Значение Эмпирической функц. распределения"
-                           FontSize="Medium"
-                           FontAttributes="Bold"
-                           BackgroundColor="White"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"
-                           Margin="0, 0, 2, 1"
-                           Padding="5"/>
+                            <chart:SfChart.SecondaryAxis>
+                                <chart:NumericalAxis>
+                                    <chart:NumericalAxis.Title>
+                                        <chart:ChartAxisTitle Text="f(x)"/>
+                                    </chart:NumericalAxis.Title>
+                                </chart:NumericalAxis>
+                            </chart:SfChart.SecondaryAxis>
 
-                </Grid>
+                            <chart:StepLineSeries ItemsSource="{Binding Variants}"
+                                                  XBindingPath="Value"
+                                                  YBindingPath="EmpiricalDistrFuncValue" />
 
-            </CollectionView.Header>
+                        </chart:SfChart>
 
-           <CollectionView.ItemTemplate>
+                        <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                              ColumnSpacing="1"
+                              Padding="0"
+                              BackgroundColor="Black">
 
-               <DataTemplate>
+                            <Label Grid.Column="0"
+                                   Text="№"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-                   <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
-                         ColumnSpacing="1"
-                         RowSpacing="0"
-                         Padding="0"
-                         BackgroundColor="Black">
+                            <Label Grid.Column="1"
+                                   Text="Значение"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-                        <Label Grid.Column="0"
-                               Text="{Binding Index}"
-                               FontSize="Medium"
-                               FontAttributes="Bold"
-                               BackgroundColor="White"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"
-                               Margin="0, 0, 0, 1"/>
+                            <Label Grid.Column="2"
+                                   Text="Частота"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-                        <Label Grid.Column="1"
-                               Text="{Binding Value}"
-                               FontSize="Medium"
-                               FontAttributes="Bold"
-                               BackgroundColor="White"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"
-                               Margin="0, 0, 0, 1"/>
+                            <Label Grid.Column="3"
+                                   Text="Относит. частота"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-                        <Label Grid.Column="2"
-                               Text="{Binding Frequency}"
-                               FontSize="Medium"
-                               FontAttributes="Bold"
-                               BackgroundColor="White"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"
-                               Margin="0, 0, 0, 1"/>
+                            <Label Grid.Column="4"
+                                   Text="Значение Эмпирической функц. распределения"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 2, 1"
+                                   Padding="5"/>
 
-                        <Label Grid.Column="3"
-                               Text="{Binding RelativeFrequency}"
-                               FontSize="Medium"
-                               FontAttributes="Bold"
-                               BackgroundColor="White"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"
-                               Margin="0, 0, 0, 1"/>
+                            </Grid>
 
-                        <Label Grid.Column="4"
-                               Text="{Binding EmpiricalDistrFuncValue}"
-                               FontSize="Medium"
-                               FontAttributes="Bold"
-                               BackgroundColor="White"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Center"
-                               Margin="0, 0, 2, 1"
-                               Padding="5"/>
+                    </StackLayout>
 
-                   </Grid>
+                </CollectionView.Header>
 
-               </DataTemplate>
+                <CollectionView.ItemTemplate>
 
-           </CollectionView.ItemTemplate>
+                    <DataTemplate>
 
-           <CollectionView.Footer>
+                        <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                              ColumnSpacing="1"
+                              RowSpacing="0"
+                              Padding="0"
+                              BackgroundColor="Black">
 
-               <BoxView VerticalOptions="Start"
-                        HorizontalOptions="FillAndExpand"
-                        HeightRequest="1"
-                        BackgroundColor="Black"/>
+                            <Label Grid.Column="0"
+                                   Text="{Binding Index}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-           </CollectionView.Footer>
+                            <Label Grid.Column="1"
+                                   Text="{Binding Value}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-       </CollectionView>
+                            <Label Grid.Column="2"
+                                   Text="{Binding Frequency}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
 
-   </StackLayout>
+                            <Label Grid.Column="3"
+                                   Text="{Binding RelativeFrequency}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="4"
+                                   Text="{Binding EmpiricalDistrFuncValue}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 2, 1"
+                                   Padding="5"/>
+
+                        </Grid>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Footer>
+
+                    <StackLayout>
+
+                        <BoxView VerticalOptions="Start"
+                                 HorizontalOptions="FillAndExpand"
+                                 HeightRequest="1"
+                                 BackgroundColor="Black"/>
+
+                        <Button Text="Продолжить"
+                                HorizontalOptions="Center"
+                                BackgroundColor="WhiteSmoke"
+                                BorderColor="Blue"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                BorderWidth="1"
+                                Margin="20"
+                                Padding="10"
+                                Command="{Binding ContinueCommand}" />
+
+                    </StackLayout>
+
+                </CollectionView.Footer>
+
+            </CollectionView>
+
+        </StackLayout>
+
+    </ContentPage.Content>
 
 </ContentPage>

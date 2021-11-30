@@ -36,6 +36,7 @@ namespace EMPILab1
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<Page1, Page1ViewModel>();
         }
     }
 }
