@@ -125,7 +125,7 @@ namespace EMPILab1.ViewModels
                     Value = group.Key,
                     Frequency = group.Count(),
                     RelativeFrequency = (double)group.Count() / uniqueValues.Count(),
-                    EmpiricalDistrFuncValue = empiricalDistrFuncValue += (double)group.Count() / uniqueValues.Count(),
+                    EmpiricalDistrFuncValue = empiricalDistrFuncValue += ((double)group.Count() / uniqueValues.Count()),
                 };
 
                 variantsList.Add(variant);

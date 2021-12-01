@@ -1,6 +1,206 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              x:Class="EMPILab1.Pages.Page1">
-    
+
+    <StackLayout Padding="20">
+
+        <StackLayout Orientation="Horizontal">
+
+            <Label Text="Количество классов"
+                   VerticalOptions="Center"/>
+
+            <Entry Text="{Binding ClassesAmount}"
+                   Placeholder="Введите кол-во классов"
+                   VerticalOptions="Center"
+                   Keyboard="Numeric"/>
+
+            <Label Text="{Binding ClassWidth, StringFormat='h={0}'}"
+                   VerticalOptions="Center"/>
+
+            <Button Text="Пересчитать"
+                    HorizontalOptions="Center"
+                    BackgroundColor="WhiteSmoke"
+                    BorderColor="DarkGreen"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BorderWidth="1"
+                    Margin="20"
+                    Padding="10"
+                    Command="{Binding RecalculateCommand}" />
+
+        </StackLayout>
+
+        <CollectionView ItemsSource="{Binding Classes}">
+
+            <CollectionView.Header>
+
+                <StackLayout>
+
+                    <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                            ColumnSpacing="1"
+                            Padding="0"
+                            BackgroundColor="Black">
+
+                        <Label Grid.Column="0"
+                                Text="№"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="1"
+                                Text="Границы"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="2"
+                                Text="Частота"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="3"
+                                Text="Относит. частота"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="4"
+                                Text="Значение Эмпирической функц. распределения"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 2, 1"
+                                Padding="5"/>
+
+                        </Grid>
+
+                </StackLayout>
+
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
+                            ColumnSpacing="1"
+                            RowSpacing="0"
+                            Padding="0"
+                            BackgroundColor="Black">
+
+                        <Label Grid.Column="0"
+                                Text="{Binding Index}"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="1"
+                                Text="{Binding Bounds}"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="2"
+                                Text="{Binding Frequency}"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="3"
+                                Text="{Binding RelativeFrequency}"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 0, 1"/>
+
+                        <Label Grid.Column="4"
+                                Text="{Binding EmpiricalDistrFuncValue}"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                BackgroundColor="White"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                Margin="0, 0, 2, 1"
+                                Padding="5"/>
+
+                    </Grid>
+
+                </DataTemplate>
+
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.Footer>
+
+                <StackLayout>
+
+                    <BoxView VerticalOptions="Start"
+                             HorizontalOptions="FillAndExpand"
+                             HeightRequest="1"
+                             BackgroundColor="Black"/>
+
+                    <!--<chart:SfChart HeightRequest="500">
+
+                        <chart:SfChart.PrimaryAxis>
+                            <chart:NumericalAxis/>
+                        </chart:SfChart.PrimaryAxis>
+
+                        <chart:SfChart.SecondaryAxis>
+                            <chart:NumericalAxis/>
+                        </chart:SfChart.SecondaryAxis>
+
+                        <chart:HistogramSeries ItemsSource="{Binding Classes}"
+                                               XBindingPath="ClassName"
+                                               YBindingPath="RelativeFrequency"
+                                               StrokeColor="White"
+                                               StrokeWidth="0.5"/>
+
+                    </chart:SfChart>-->
+
+                    <Button Text="Продолжить"
+                            HorizontalOptions="Center"
+                            BackgroundColor="WhiteSmoke"
+                            BorderColor="Blue"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            BorderWidth="1"
+                            Margin="20"
+                            Padding="10"
+                            Command="{Binding ContinueCommand}" />
+
+                </StackLayout>
+
+            </CollectionView.Footer>
+
+        </CollectionView>
+
+    </StackLayout>
+
 </ContentPage>
