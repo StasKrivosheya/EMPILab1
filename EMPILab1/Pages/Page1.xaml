@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
+             xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
              x:Class="EMPILab1.Pages.Page1">
 
     <StackLayout Padding="20">
@@ -166,23 +167,11 @@
                              HeightRequest="1"
                              BackgroundColor="Black"/>
 
-                    <!--<chart:SfChart HeightRequest="500">
-
-                        <chart:SfChart.PrimaryAxis>
-                            <chart:NumericalAxis/>
-                        </chart:SfChart.PrimaryAxis>
-
-                        <chart:SfChart.SecondaryAxis>
-                            <chart:NumericalAxis/>
-                        </chart:SfChart.SecondaryAxis>
-
-                        <chart:HistogramSeries ItemsSource="{Binding Classes}"
-                                               XBindingPath="ClassName"
-                                               YBindingPath="RelativeFrequency"
-                                               StrokeColor="White"
-                                               StrokeWidth="0.5"/>
-
-                    </chart:SfChart>-->
+                    <oxy:PlotView Model="{Binding HistogramModel}"
+                                  BackgroundColor="AliceBlue"
+                                  HeightRequest="500"
+                                  VerticalOptions="FillAndExpand"
+                                  HorizontalOptions="FillAndExpand"/>
 
                     <Button Text="Продолжить"
                             HorizontalOptions="Center"

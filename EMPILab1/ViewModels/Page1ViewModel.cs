@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using EMPILab1.Models;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using Prism.Commands;
 using Prism.Navigation;
 
@@ -59,6 +62,13 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _classes, value);
         }
 
+        private PlotModel _histogramModel;
+        public PlotModel HistogramModel
+        {
+            get => _histogramModel;
+            set => SetProperty(ref _histogramModel, value);
+        }
+
         private ICommand _recalculateCommand;
         public ICommand RecalculateCommand => _recalculateCommand ??= new DelegateCommand(OnRecalculateCommandAsync);
 
@@ -80,6 +90,7 @@ namespace EMPILab1.ViewModels
 
             ClassesAmount = optimalClassCount.ToString();
             Classes = new(classes);
+            HistogramModel = GetClassesChartModel();
         }
 
         #endregion
@@ -93,6 +104,7 @@ namespace EMPILab1.ViewModels
                 var classes = SplitOnClasses(number);
 
                 Classes = new(classes);
+                HistogramModel = GetClassesChartModel();
             }
         }
 
@@ -108,9 +120,7 @@ namespace EMPILab1.ViewModels
             for (int i = 1; i <= classCount; i++)
             {
                 var leftBound = minVal;
-                var rightBound = i == classCount
-                    ? maxVal
-                    : minVal + h;
+                var rightBound = minVal + h;
 
                 classes.Add(new ClassViewModel
                 {
@@ -119,10 +129,14 @@ namespace EMPILab1.ViewModels
                     ClassWidth = h,
                     Bounds = new Tuple<double, double>(leftBound, rightBound),
                 });
-                
-                classes[i - 1].Frequency = Variants
-                    .Where(v => v.Value >= leftBound && v.Value <= rightBound)
-                    .Count();
+
+                var includedVariants = Variants.Where(v => v.Value >= leftBound && v.Value < rightBound).ToList();
+                if (i == classCount && !includedVariants.Contains(Variants.LastOrDefault()))
+                {
+                    includedVariants.Add(Variants.LastOrDefault());
+                }
+
+                classes[i - 1].Frequency = includedVariants.Count;
                 classes[i - 1].RelativeFrequency = classes[i - 1].Frequency / Variants.Count;
                 classes[i - 1].EmpiricalDistrFuncValue = empiricalDistrFuncValue += classes[i - 1].RelativeFrequency;
 
@@ -135,6 +149,39 @@ namespace EMPILab1.ViewModels
         private int GetOptimalClassCount()
         {
             return (int)Math.Round(1 + 3.32 * Math.Log10(Variants.Count), 0);
+        }
+
+        public PlotModel GetClassesChartModel()
+        {
+            var plotModel = new PlotModel();
+
+            var xAxis = new LinearAxis
+            {
+                Title = "X (classes' range)",
+                Position = AxisPosition.Bottom,
+                LabelFormatter = (param) => Math.Round(param, 3).ToString()
+            };
+
+            plotModel.Axes.Add(xAxis);
+
+            var yAxis = new LinearAxis
+            {
+                Title = "P (relative frequency)",
+                Position = AxisPosition.Left
+            };
+
+            plotModel.Axes.Add(yAxis);
+
+            var barSeries = new RectangleBarSeries();
+
+            foreach (var item in Classes)
+            {
+                barSeries.Items.Add(new RectangleBarItem(item.Bounds.Item1, 0, item.Bounds.Item2, item.RelativeFrequency));
+            }
+
+            plotModel.Series.Add(barSeries);
+
+            return plotModel;
         }
 
         #endregion
