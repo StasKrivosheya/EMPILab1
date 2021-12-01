@@ -17,6 +17,7 @@
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
     <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="19.3.0.43" />
     <PackageReference Include="Syncfusion.Xamarin.SfAutoComplete" Version="19.3.0.43" />
+    <PackageReference Include="OxyPlot.Xamarin.Forms" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Prism.Unity.Forms" />
@@ -27,6 +28,7 @@
     <None Remove="Syncfusion.Xamarin.SfAutoComplete" />
     <None Remove="Syncfusion.XlsIO.Net.Core" />
     <None Remove="Converters\" />
+    <None Remove="OxyPlot.Xamarin.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
