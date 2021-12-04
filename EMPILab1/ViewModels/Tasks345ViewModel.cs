@@ -12,9 +12,9 @@ using Prism.Navigation;
 
 namespace EMPILab1.ViewModels
 {
-    public class Page1ViewModel : BaseViewModel
+    public class Tasks345ViewModel : BaseViewModel
     {
-        public Page1ViewModel(INavigationService navigationService) : base(navigationService)
+        public Tasks345ViewModel(INavigationService navigationService) : base(navigationService)
         {
         }
 

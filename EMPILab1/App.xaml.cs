@@ -17,7 +17,7 @@ namespace EMPILab1
 
             InitializeComponent();
 
-            await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MainPage)}");
+            await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(Tasks12)}");
         }
 
         protected override void OnStart()
@@ -35,8 +35,8 @@ namespace EMPILab1
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
-            containerRegistry.RegisterForNavigation<Page1, Page1ViewModel>();
+            containerRegistry.RegisterForNavigation<Tasks12, Tasks12ViewModel>();
+            containerRegistry.RegisterForNavigation<Tasks345, Tasks345ViewModel>();
         }
     }
 }

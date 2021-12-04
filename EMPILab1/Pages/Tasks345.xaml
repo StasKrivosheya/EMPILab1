@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
-             x:Class="EMPILab1.Pages.Page1">
+             x:Class="EMPILab1.Pages.Tasks345">
 
-    <StackLayout Padding="20, 10">
+    <StackLayout Padding="20, 10"
+                 Spacing="10">
 
         <StackLayout Orientation="Horizontal">
 
@@ -27,7 +27,7 @@
                     TextColor="Black"
                     FontAttributes="Bold"
                     BorderWidth="1"
-                    Margin="20"
+                    Margin="20, 0"
                     Padding="10"
                     Command="{Binding RecalculateCommand}" />
 
@@ -38,7 +38,7 @@
                     TextColor="Black"
                     FontAttributes="Bold"
                     BorderWidth="1"
-                    Margin="20"
+                    Margin="20, 0"
                     Padding="10"
                     Command="{Binding ContinueCommand}" />
 

@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace EMPILab1.Pages
 {
-    public partial class MainPage : ContentPage
+    public partial class Tasks12 : ContentPage
     {
-        public MainPage()
+        public Tasks12()
         {
             InitializeComponent();
         }
@@ -13,7 +13,7 @@ namespace EMPILab1.Pages
         // HACK: MVVM violation
         void Button_Clicked(object sender, System.EventArgs e)
         {
-            var lastIndex = ((MainPageViewModel)BindingContext).Variants.Count - 1;
+            var lastIndex = ((Tasks12ViewModel)BindingContext).Variants.Count - 1;
             Collection.ScrollTo(lastIndex);
         }
     }

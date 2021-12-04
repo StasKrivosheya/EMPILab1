@@ -11,9 +11,9 @@ using Xamarin.Essentials;
 
 namespace EMPILab1.ViewModels
 {
-    public class MainPageViewModel : BaseViewModel
+    public class Tasks12ViewModel : BaseViewModel
     {
-        public MainPageViewModel(
+        public Tasks12ViewModel(
             INavigationService navigationService)
             : base(navigationService)
         {
@@ -68,7 +68,7 @@ namespace EMPILab1.ViewModels
                 { nameof(Variants), Variants }
             };
 
-            return NavigationService.NavigateAsync(nameof(Page1), prms);
+            return NavigationService.NavigateAsync(nameof(Tasks345), prms);
         }
 
         private async Task OnLoadFileCommandAsync()

@@ -5,7 +5,7 @@
              ios:Page.UseSafeArea="true"
              xmlns:converters="clr-namespace:EMPILab1.Converters"
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
-             x:Class="EMPILab1.Pages.MainPage"
+             x:Class="EMPILab1.Pages.Tasks12"
              Title="Главная">
 
     <ContentPage.Resources>

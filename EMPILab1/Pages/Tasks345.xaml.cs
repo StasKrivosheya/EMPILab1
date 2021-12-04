@@ -2,9 +2,9 @@
 
 namespace EMPILab1.Pages
 {
-    public partial class Page1 : ContentPage
+    public partial class Tasks345 : ContentPage
     {
-        public Page1()
+        public Tasks345()
         {
             InitializeComponent();
         }
