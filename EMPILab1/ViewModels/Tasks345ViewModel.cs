@@ -63,6 +63,13 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _initialDataset, value);
         }
 
+        private string _bandwidth = string.Empty;
+        public string Bandwidth
+        {
+            get => _bandwidth;
+            set => SetProperty(ref _bandwidth, value);
+        }
+
         private ICommand _recalculateCommand;
         public ICommand RecalculateCommand => _recalculateCommand ??= new DelegateCommand(OnRecalculateCommandAsync);
 
@@ -197,8 +204,14 @@ namespace EMPILab1.ViewModels
         {
             var result = new LineSeries();
 
-            var bandwidth = MathHelpers.GetScottBandwidth(Variants.ToList());
-            var points = MathHelpers.GetGaussianKdePoints(InitialDataset, bandwidth);
+            if (string.IsNullOrEmpty(Bandwidth) || !double.TryParse(Bandwidth, out var _))
+            {
+                var bandwidth = MathHelpers.GetScottBandwidth(Variants.ToList());
+
+                Bandwidth = bandwidth.ToString();
+            }
+            
+            var points = MathHelpers.GetGaussianKdePoints(InitialDataset, double.Parse(Bandwidth));
 
             foreach (var point in points)
             {

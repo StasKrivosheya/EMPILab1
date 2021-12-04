@@ -14,11 +14,22 @@
 
             <Entry Text="{Binding ClassesAmount}"
                    Placeholder="Введите кол-во классов"
+                   WidthRequest="50"
+                   HorizontalOptions="Start"
                    VerticalOptions="Center"
                    Keyboard="Numeric"/>
 
             <Label Text="{Binding ClassWidth, StringFormat='h={0}'}"
                    VerticalOptions="Center"/>
+
+            <Label Text="    |    ширина окна:"
+                   VerticalOptions="Center"/>
+
+            <Entry Text="{Binding Bandwidth}"
+                   Placeholder="ширина окна"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Keyboard="Numeric"/>
 
             <Button Text="Пересчитать"
                     HorizontalOptions="Center"
