@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using EMPILab1.Helpers;
 using EMPILab1.Models;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -55,6 +56,13 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _histogramModel, value);
         }
 
+        private List<double> _initialDataset;
+        public List<double> InitialDataset
+        {
+            get => _initialDataset;
+            set => SetProperty(ref _initialDataset, value);
+        }
+
         private ICommand _recalculateCommand;
         public ICommand RecalculateCommand => _recalculateCommand ??= new DelegateCommand(OnRecalculateCommandAsync);
 
@@ -69,6 +77,11 @@ namespace EMPILab1.ViewModels
             if (parameters.TryGetValue(nameof(Variants), out IEnumerable<VariantItemViewModel> variants))
             {
                 Variants = new(variants);
+            }
+
+            if (parameters.TryGetValue(nameof(InitialDataset), out IEnumerable<double> initailDataset))
+            {
+                InitialDataset = new(initailDataset);
             }
 
             var optimalClassCount = GetOptimalClassCount();
@@ -134,10 +147,10 @@ namespace EMPILab1.ViewModels
 
         private int GetOptimalClassCount()
         {
-            return (int)Math.Round(1 + 3.32 * Math.Log10(Variants.Count), 0);
+            return (int)Math.Round(1 + 3.32 * Math.Log10(Variants.Count), 0, MidpointRounding.ToEven) + 1;
         }
 
-        public PlotModel GetClassesChartModel()
+        private PlotModel GetClassesChartModel()
         {
             var plotModel = new PlotModel();
 
@@ -174,7 +187,25 @@ namespace EMPILab1.ViewModels
 
             plotModel.Series.Add(barSeries);
 
+            var kdeLineSeries = GetKDELineSeries();
+            plotModel.Series.Add(kdeLineSeries);
+
             return plotModel;
+        }
+
+        private LineSeries GetKDELineSeries()
+        {
+            var result = new LineSeries();
+
+            var bandwidth = MathHelpers.GetScottBandwidth(Variants.ToList());
+            var points = MathHelpers.GetGaussianKdePoints(InitialDataset, bandwidth);
+
+            foreach (var point in points)
+            {
+                result.Points.Add(new DataPoint(point.Item1, point.Item2 * ClassWidth));
+            }
+
+            return result;
         }
 
         #endregion

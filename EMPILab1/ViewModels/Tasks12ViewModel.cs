@@ -42,6 +42,13 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _variants, value);
         }
 
+        private List<double> _initialDataset;
+        public List<double> InitialDataset
+        {
+            get => _initialDataset;
+            set => SetProperty(ref _initialDataset, value);
+        }
+
         private ICommand _loadFileCommand;
         public ICommand LoadFileCommand => _loadFileCommand ??= new DelegateCommand(async () => await OnLoadFileCommandAsync());
 
@@ -65,7 +72,8 @@ namespace EMPILab1.ViewModels
         {
             var prms = new NavigationParameters
             {
-                { nameof(Variants), Variants }
+                { nameof(Variants), Variants },
+                { nameof(InitialDataset), InitialDataset },
             };
 
             return NavigationService.NavigateAsync(nameof(Tasks345), prms);
@@ -96,15 +104,7 @@ namespace EMPILab1.ViewModels
 
         private void CalculateModels()
         {
-            var valuesList = new List<double>();
-
-            foreach (var str in SelectedFile.FileContent)
-            {
-                if (double.TryParse(str, out var num))
-                {
-                    valuesList.Add(num);
-                }
-            }
+            var valuesList = InitialDataset = GetParsedListOfData(SelectedFile.FileContent);
 
             // test
             // valuesList = new List<double> { 0.5, 1.2, 1.2, 3, 4, 5, 5, 5, 7.3, 8 };
@@ -125,8 +125,10 @@ namespace EMPILab1.ViewModels
                     Value = group.Key,
                     Frequency = group.Count(),
                     RelativeFrequency = (double)group.Count() / uniqueValues.Count(),
-                    EmpiricalDistrFuncValue = empiricalDistrFuncValue += ((double)group.Count() / uniqueValues.Count()),
                 };
+
+                empiricalDistrFuncValue += ((double)group.Count() / valuesList.Count());
+                variant.EmpiricalDistrFuncValue = empiricalDistrFuncValue;
 
                 variantsList.Add(variant);
 
@@ -134,6 +136,35 @@ namespace EMPILab1.ViewModels
             }
             
             Variants = new(variantsList);
+        }
+
+        private List<double> GetParsedListOfData(string[] fileContent)
+        {
+            var valuesList = new List<double>();
+
+            foreach (var str in fileContent)
+            {
+                var preparedStr = str.Trim();
+
+                if (preparedStr.Contains(" "))
+                {
+                    var strs = preparedStr.Split(" ".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var s in strs)
+                    {
+                        if (double.TryParse(s, out double num))
+                        {
+                            valuesList.Add(num);
+                        }
+                    }
+                }
+                else if (double.TryParse(str, out var num))
+                {
+                    valuesList.Add(num);
+                }
+            }
+
+            return valuesList;
         }
 
         #endregion
