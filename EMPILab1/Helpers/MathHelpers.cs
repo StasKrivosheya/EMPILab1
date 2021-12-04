@@ -7,6 +7,8 @@ namespace EMPILab1.Helpers
 {
     public static class MathHelpers
     {
+        #region -- For Task 5 --
+
         public static double GetDispersion(List<VariantItemViewModel> variants)
         {
             var result = 0d;
@@ -70,5 +72,7 @@ namespace EMPILab1.Helpers
 
             return result;
         }
+
+        #endregion
     }
 }

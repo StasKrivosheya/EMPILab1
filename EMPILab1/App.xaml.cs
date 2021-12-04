@@ -35,8 +35,10 @@ namespace EMPILab1
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
+
             containerRegistry.RegisterForNavigation<Tasks12, Tasks12ViewModel>();
             containerRegistry.RegisterForNavigation<Tasks345, Tasks345ViewModel>();
+            containerRegistry.RegisterForNavigation<Task6, Task6ViewModel>();
         }
     }
 }

@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EMPILab1.Pages.Task6"
+             Title="Hезсунені кількісні характеристики">
+
+    <StackLayout Padding="20">
+
+             <Button Text="Продолжить"
+                     HorizontalOptions="EndAndExpand"
+                     VerticalOptions="Center"
+                     BackgroundColor="WhiteSmoke"
+                     BorderColor="Blue"
+                     TextColor="Black"
+                     FontAttributes="Bold"
+                     BorderWidth="1"
+                     Margin="20"
+                     Padding="10"
+                     Command="{Binding ContinueCommand}" />
+
+            <CollectionView ItemsSource="{Binding Characteristics}">
+
+                <CollectionView.Header>
+
+                    <StackLayout>
+
+                        <Grid ColumnDefinitions="0.3*, 0.2*, 0.25*, 0.25*"
+                              ColumnSpacing="1"
+                              Padding="0"
+                              BackgroundColor="Black">
+
+                            <Label Grid.Column="0"
+                                   Text=" "
+                                   BackgroundColor="White"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="1"
+                                   Text="Значение"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="2"
+                                   Text="Сред-кв. отклонение"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="3"
+                                   Text="95% доверит. интервал"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                        </Grid>
+
+                    </StackLayout>
+
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Grid ColumnDefinitions="0.3*, 0.2*, 0.25*, 0.25*"
+                              ColumnSpacing="1"
+                              RowSpacing="0"
+                              Padding="0"
+                              BackgroundColor="Black">
+
+                            <Label Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="1"
+                                   Text="{Binding Value}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="2"
+                                   Text="{Binding StandardDeviation}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                            <Label Grid.Column="3"
+                                   Text="{Binding ConfidenceInterval}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   BackgroundColor="White"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Margin="0, 0, 0, 1"/>
+
+                        </Grid>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Footer>
+
+                    <StackLayout>
+
+                        <BoxView VerticalOptions="Start"
+                                 HorizontalOptions="FillAndExpand"
+                                 HeightRequest="1"
+                                 BackgroundColor="Black"/>
+
+                    </StackLayout>
+
+                </CollectionView.Footer>
+
+            </CollectionView>
+
+        </StackLayout>
+
+</ContentPage>

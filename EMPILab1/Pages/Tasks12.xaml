@@ -70,8 +70,6 @@
 
             </StackLayout>
 
-
-
             <CollectionView ItemsSource="{Binding Variants}"
                             IsVisible="{Binding IsFileSelected}"
                             x:Name="Collection">

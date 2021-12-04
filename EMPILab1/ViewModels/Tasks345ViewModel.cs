@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
+using EMPILab1.Pages;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -73,6 +75,9 @@ namespace EMPILab1.ViewModels
         private ICommand _recalculateCommand;
         public ICommand RecalculateCommand => _recalculateCommand ??= new DelegateCommand(OnRecalculateCommandAsync);
 
+        private ICommand _continueCommand;
+        public ICommand ContinueCommand => _continueCommand ??= new DelegateCommand(async () => await OnContinueCommandAsync());
+
         #endregion
 
         #region -- Overrides --
@@ -102,6 +107,11 @@ namespace EMPILab1.ViewModels
         #endregion
 
         #region -- Private helpers --
+
+        private Task OnContinueCommandAsync()
+        {
+            return NavigationService.NavigateAsync(nameof(Task6));
+        }
 
         private void OnRecalculateCommandAsync()
         {
