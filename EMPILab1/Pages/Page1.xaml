@@ -5,7 +5,7 @@
              xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
              x:Class="EMPILab1.Pages.Page1">
 
-    <StackLayout Padding="20">
+    <StackLayout Padding="20, 10">
 
         <StackLayout Orientation="Horizontal">
 
@@ -30,6 +30,17 @@
                     Margin="20"
                     Padding="10"
                     Command="{Binding RecalculateCommand}" />
+
+            <Button Text="Продолжить"
+                    HorizontalOptions="EndAndExpand"
+                    BackgroundColor="WhiteSmoke"
+                    BorderColor="Blue"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BorderWidth="1"
+                    Margin="20"
+                    Padding="10"
+                    Command="{Binding ContinueCommand}" />
 
         </StackLayout>
 
@@ -172,17 +183,6 @@
                                   HeightRequest="500"
                                   VerticalOptions="FillAndExpand"
                                   HorizontalOptions="FillAndExpand"/>
-
-                    <Button Text="Продолжить"
-                            HorizontalOptions="Center"
-                            BackgroundColor="WhiteSmoke"
-                            BorderColor="Blue"
-                            TextColor="Black"
-                            FontAttributes="Bold"
-                            BorderWidth="1"
-                            Margin="20"
-                            Padding="10"
-                            Command="{Binding ContinueCommand}" />
 
                 </StackLayout>
 

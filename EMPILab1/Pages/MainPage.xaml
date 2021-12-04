@@ -18,65 +18,67 @@
 
         <StackLayout Padding="20">
 
-            <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
-                   IsVisible="{Binding IsFileSelected}"
-                   HorizontalOptions="CenterAndExpand"
-                   TextColor="DarkGreen"/>
+            <StackLayout Orientation="Horizontal">
 
-            <Label Text="Файл не выбран"
-                   IsVisible="{Binding IsFileSelected, Converter={StaticResource InverseBooleanConverter}}"
-                   HorizontalOptions="CenterAndExpand"
-                   TextColor="DarkRed"/>
+                <StackLayout HorizontalOptions="StartAndExpand"
+                             Margin="20, 0">
 
-            <Button Text="Загрузить файл"
-                    HorizontalOptions="Center"
-                    BackgroundColor="WhiteSmoke"
-                    BorderColor="DarkGreen"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    BorderWidth="1"
-                    Margin="20"
-                    Padding="10"
-                    Command="{Binding LoadFileCommand}" />
+                    <Label Text="{Binding SelectedFile.FileName,StringFormat='Выбран файл: {0}'}"
+                           IsVisible="{Binding IsFileSelected}"
+                           TextColor="DarkGreen"/>
+
+                    <Label Text="Файл не выбран"
+                           IsVisible="{Binding IsFileSelected, Converter={StaticResource InverseBooleanConverter}}"
+                           TextColor="DarkRed"/>
+
+                    <Button Text="Загрузить файл"
+                            HorizontalOptions="Start"
+                            BackgroundColor="WhiteSmoke"
+                            BorderColor="DarkGreen"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            BorderWidth="1"
+                            Padding="10"
+                            Command="{Binding LoadFileCommand}" />
+
+                </StackLayout>
+
+                <Button Text="см. график"
+                        IsVisible="{Binding IsFileSelected}"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="LightBlue"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"
+                        Clicked="Button_Clicked" />
+
+                <Button Text="Продолжить"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="Blue"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"
+                        Command="{Binding ContinueCommand}" />
+
+            </StackLayout>
+
+
 
             <CollectionView ItemsSource="{Binding Variants}"
-                            IsVisible="{Binding IsFileSelected}">
+                            IsVisible="{Binding IsFileSelected}"
+                            x:Name="Collection">
 
                 <CollectionView.Header>
 
                     <StackLayout>
-
-                        <chart:SfChart IsVisible="{Binding IsFileSelected}"
-                                       BackgroundColor="#f2f0e9"
-                                       HeightRequest="500">
-
-                            <chart:SfChart.Title>
-                                <chart:ChartTitle Text="Графік емпіричної функції розподілу за даними варіаційного ряду"
-                                                  FontAttributes="Bold"
-                                                  Margin="0, 10"/>
-                            </chart:SfChart.Title>
-
-                            <chart:SfChart.PrimaryAxis>
-                                <chart:NumericalAxis>
-                                    <chart:NumericalAxis.Title>
-                                        <chart:ChartAxisTitle Text="x"/>
-                                    </chart:NumericalAxis.Title>
-                                </chart:NumericalAxis>
-                            </chart:SfChart.PrimaryAxis>
-
-                            <chart:SfChart.SecondaryAxis>
-                                <chart:NumericalAxis>
-                                    <chart:NumericalAxis.Title>
-                                        <chart:ChartAxisTitle Text="f(x)"/>
-                                    </chart:NumericalAxis.Title>
-                                </chart:NumericalAxis>
-                            </chart:SfChart.SecondaryAxis>
-
-                            <chart:StepLineSeries ItemsSource="{Binding Variants}"
-                                                  XBindingPath="Value"
-                                                  YBindingPath="EmpiricalDistrFuncValue" />
-
-                        </chart:SfChart>
 
                         <Grid ColumnDefinitions="0.05*, 0.23*, 0.23*, 0.23*, 0.26*"
                               ColumnSpacing="1"
@@ -129,7 +131,7 @@
                                    Margin="0, 0, 2, 1"
                                    Padding="5"/>
 
-                            </Grid>
+                        </Grid>
 
                     </StackLayout>
 
@@ -206,16 +208,37 @@
                                  HeightRequest="1"
                                  BackgroundColor="Black"/>
 
-                        <Button Text="Продолжить"
-                                HorizontalOptions="Center"
-                                BackgroundColor="WhiteSmoke"
-                                BorderColor="Blue"
-                                TextColor="Black"
-                                FontAttributes="Bold"
-                                BorderWidth="1"
-                                Margin="20"
-                                Padding="10"
-                                Command="{Binding ContinueCommand}" />
+                        <chart:SfChart IsVisible="{Binding IsFileSelected}"
+                                       BackgroundColor="#f2f0e9"
+                                       HeightRequest="500">
+
+                            <chart:SfChart.Title>
+                                <chart:ChartTitle Text="Графік емпіричної функції розподілу за даними варіаційного ряду"
+                                                  FontAttributes="Bold"
+                                                  Margin="0, 10"/>
+                            </chart:SfChart.Title>
+
+                            <chart:SfChart.PrimaryAxis>
+                                <chart:NumericalAxis>
+                                    <chart:NumericalAxis.Title>
+                                        <chart:ChartAxisTitle Text="x"/>
+                                    </chart:NumericalAxis.Title>
+                                </chart:NumericalAxis>
+                            </chart:SfChart.PrimaryAxis>
+
+                            <chart:SfChart.SecondaryAxis>
+                                <chart:NumericalAxis>
+                                    <chart:NumericalAxis.Title>
+                                        <chart:ChartAxisTitle Text="f(x)"/>
+                                    </chart:NumericalAxis.Title>
+                                </chart:NumericalAxis>
+                            </chart:SfChart.SecondaryAxis>
+
+                            <chart:StepLineSeries ItemsSource="{Binding Variants}"
+                                                  XBindingPath="Value"
+                                                  YBindingPath="EmpiricalDistrFuncValue" />
+
+                        </chart:SfChart>
 
                     </StackLayout>
 

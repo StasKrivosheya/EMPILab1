@@ -34,20 +34,6 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _classWidth, value);
         }
 
-        private double _minValue;
-        public double MinValue
-        {
-            get => _minValue;
-            set => SetProperty(ref _minValue, value);
-        }
-
-        private double _maxValue;
-        public double MaxValue
-        {
-            get => _maxValue;
-            set => SetProperty(ref _maxValue, value);
-        }
-
         private ObservableCollection<VariantItemViewModel> _variants;
         public ObservableCollection<VariantItemViewModel> Variants
         {
@@ -110,8 +96,8 @@ namespace EMPILab1.ViewModels
 
         private IEnumerable<ClassViewModel> SplitOnClasses(int classCount)
         {
-            var minVal = MinValue = Variants.AsQueryable().Min(v => v.Value);
-            var maxVal = MaxValue = Variants.AsQueryable().Max(v => v.Value);
+            var minVal = Variants.AsQueryable().Min(v => v.Value);
+            var maxVal = Variants.AsQueryable().Max(v => v.Value);
             var h = ClassWidth = Math.Round((maxVal - minVal) / classCount, 4, MidpointRounding.AwayFromZero);
 
             var classes = new List<ClassViewModel>();
@@ -176,7 +162,14 @@ namespace EMPILab1.ViewModels
 
             foreach (var item in Classes)
             {
-                barSeries.Items.Add(new RectangleBarItem(item.Bounds.Item1, 0, item.Bounds.Item2, item.RelativeFrequency));
+                var bar = new RectangleBarItem(item.Bounds.Item1, 0, item.Bounds.Item2, item.RelativeFrequency);
+
+                if (Classes.Count < 25)
+                {
+                    bar.Title = item.ClassName;
+                }
+
+                barSeries.Items.Add(bar);
             }
 
             plotModel.Series.Add(barSeries);

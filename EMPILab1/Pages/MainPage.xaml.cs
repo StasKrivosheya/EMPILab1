@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using EMPILab1.ViewModels;
+using Xamarin.Forms;
 
 namespace EMPILab1.Pages
 {
@@ -7,6 +8,13 @@ namespace EMPILab1.Pages
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        // HACK: MVVM violation
+        void Button_Clicked(object sender, System.EventArgs e)
+        {
+            var lastIndex = ((MainPageViewModel)BindingContext).Variants.Count - 1;
+            Collection.ScrollTo(lastIndex);
         }
     }
 }
