@@ -4,7 +4,8 @@
              x:Class="EMPILab1.Pages.Task6"
              Title="Hезсунені кількісні характеристики">
 
-    <StackLayout Padding="20">
+    <StackLayout Padding="20, 5"
+                 Spacing="5">
 
              <Button Text="Продолжить"
                      HorizontalOptions="EndAndExpand"

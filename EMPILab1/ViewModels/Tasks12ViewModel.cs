@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EMPILab1.Extensions;
 using EMPILab1.Models;
 using EMPILab1.Pages;
 using Prism.Commands;
@@ -109,33 +109,7 @@ namespace EMPILab1.ViewModels
             // test
             // valuesList = new List<double> { 0.5, 1.2, 1.2, 3, 4, 5, 5, 5, 7.3, 8 };
 
-            valuesList.Sort();
-
-            var uniqueValues = valuesList.GroupBy(v => v);
-
-            var variantsList = new List<VariantItemViewModel>();
-
-            var i = 1;
-            var empiricalDistrFuncValue = 0d;
-            foreach (var group in uniqueValues)
-            {
-                var variant = new VariantItemViewModel
-                {
-                    Index = i,
-                    Value = group.Key,
-                    Frequency = group.Count(),
-                    RelativeFrequency = (double)group.Count() / uniqueValues.Count(),
-                };
-
-                empiricalDistrFuncValue += ((double)group.Count() / valuesList.Count());
-                variant.EmpiricalDistrFuncValue = empiricalDistrFuncValue;
-
-                variantsList.Add(variant);
-
-                ++i;
-            }
-            
-            Variants = new(variantsList);
+            Variants = new(valuesList.ToVariantsList());
         }
 
         private List<double> GetParsedListOfData(string[] fileContent)
