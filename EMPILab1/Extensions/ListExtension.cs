@@ -9,9 +9,9 @@ namespace EMPILab1.Extensions
     {
         public static List<VariantItemViewModel> ToVariantsList(this List<double> valuesList)
         {
-            valuesList.Sort();
+            var sortedValues = valuesList.OrderBy(v => v).ToList();
 
-            var uniqueValues = valuesList.GroupBy(v => v);
+            var uniqueValues = sortedValues.GroupBy(v => v);
 
             var variantsList = new List<VariantItemViewModel>();
 

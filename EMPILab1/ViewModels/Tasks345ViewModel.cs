@@ -229,8 +229,8 @@ namespace EMPILab1.ViewModels
 
                 Bandwidth = bandwidth.ToString();
             }
-            
-            var points = MathHelpers.GetGaussianKdePoints(InitialDataset, double.Parse(Bandwidth));
+            var sortedDataset = InitialDataset.OrderBy(u => u).ToList();
+            var points = MathHelpers.GetGaussianKdePoints(sortedDataset, double.Parse(Bandwidth));
 
             foreach (var point in points)
             {
