@@ -110,7 +110,13 @@ namespace EMPILab1.ViewModels
 
         private Task OnContinueCommandAsync()
         {
-            return NavigationService.NavigateAsync(nameof(Task6));
+            var prms = new NavigationParameters
+            {
+                { nameof(List<double>), InitialDataset },
+                { nameof(Variants), Variants },
+            };
+
+            return NavigationService.NavigateAsync(nameof(Task6), prms);
         }
 
         private void OnRecalculateCommandAsync()
@@ -164,7 +170,10 @@ namespace EMPILab1.ViewModels
 
         private int GetOptimalClassCount()
         {
-            return (int)Math.Round(1 + 3.32 * Math.Log10(Variants.Count), 0, MidpointRounding.ToEven) + 1;
+            var m = Math.Round(1 + 3.32 * Math.Log10(Variants.Count), 0);
+            var nearestOdd = (int)(2 * Math.Floor(m / 2) + 1);
+
+            return nearestOdd;
         }
 
         private PlotModel GetClassesChartModel()

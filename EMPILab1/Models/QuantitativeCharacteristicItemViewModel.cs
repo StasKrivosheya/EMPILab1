@@ -12,25 +12,28 @@ namespace EMPILab1.Models
             set => SetProperty(ref _name, value);
         }
 
-        private double _value;
-        public double Value
+        // double
+        private string _value;
+        public string Value
         {
             get => _value;
             set => SetProperty(ref _value, value);
         }
 
-        private double _standardDeviation;
-        public double StandardDeviation
+        // double
+        private string _standardDeviation;
+        public string StandardDeviation
         {
             get => _standardDeviation;
             set => SetProperty(ref _standardDeviation, value);
         }
 
-        private Tuple<double, double> _interval;
-        public Tuple<double, double> Interval
+        // Tuple<double, double>
+        private string _confidenceInterval;
+        public string ConfidenceInterval
         {
-            get => _interval;
-            set => SetProperty(ref _interval, value);
+            get => _confidenceInterval;
+            set => SetProperty(ref _confidenceInterval, value);
         }
     }
 }
