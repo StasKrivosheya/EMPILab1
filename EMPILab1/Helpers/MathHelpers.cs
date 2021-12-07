@@ -186,7 +186,7 @@ namespace EMPILab1.Helpers
             var sum = 0d;
             var mean = Mean(x);
 
-            for (var val = 0; val < x.Count; val++)
+            foreach (var val in x)
             {
                 sum += Math.Pow(val - mean, 3);
             }
@@ -223,7 +223,7 @@ namespace EMPILab1.Helpers
             var sum = 0d;
             var mean = Mean(x);
 
-            for (var val = 1; val < x.Count; val++)
+            foreach (var val in x)
             {
                 sum += Math.Pow(val - mean, 4);
             }
@@ -268,7 +268,7 @@ namespace EMPILab1.Helpers
             var sum = 0d;
             var mean = Mean(x);
 
-            for (var val = 0; val < x.Count; val++)
+            foreach (var val in x)
             {
                 sum += Math.Pow(val - mean, 2);
             }
