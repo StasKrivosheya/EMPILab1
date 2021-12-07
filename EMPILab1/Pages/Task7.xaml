@@ -5,13 +5,25 @@
              x:Class="EMPILab1.Pages.Task7"
              Title="Аномалии">
 
-    <StackLayout>
+    <ContentPage.ToolbarItems>
 
-        <oxy:PlotView Model="{Binding ScatterPlotModel}"
-                      BackgroundColor="AliceBlue"
-                      VerticalOptions="FillAndExpand"
-                      HorizontalOptions="FillAndExpand"/>
+        <ToolbarItem Command="{Binding DeleteAnomaliesCommand}"                                     
+                     Text="Удалить аномалии"
+                     Order="Primary"/>
 
-    </StackLayout>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <StackLayout>
+
+            <oxy:PlotView Model="{Binding ScatterPlotModel}"
+                          BackgroundColor="AliceBlue"
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
 
 </ContentPage>

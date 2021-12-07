@@ -3,10 +3,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EMPILab1.Events;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
 using EMPILab1.Pages;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
 
 namespace EMPILab1.ViewModels
@@ -15,9 +17,12 @@ namespace EMPILab1.ViewModels
     {
         private const double ALPHA = 0.05;
 
-        public Task6ViewModel(INavigationService navigationService)
+        public Task6ViewModel(
+            INavigationService navigationService,
+            IEventAggregator eventAggregator)
             : base(navigationService)
         {
+            eventAggregator.GetEvent<InitialDatasetChanged>().Subscribe(OnInitialDatasetChanged);
         }
 
         #region -- Public properties --
@@ -36,13 +41,6 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _initialDataset, value);
         }
 
-        private List<VariantItemViewModel> _variants;
-        public List<VariantItemViewModel> Variants
-        {
-            get => _variants;
-            set => SetProperty(ref _variants, value);
-        }
-
         private ICommand _continueCommand;
         public ICommand ContinueCommand => _continueCommand ??= new DelegateCommand(async () => await OnContinueCommandAsync());
 
@@ -59,11 +57,11 @@ namespace EMPILab1.ViewModels
                 InitialDataset = new List<double>(initialDataset);
             }
 
-            if (parameters.TryGetValue(nameof(Variants), out IEnumerable<VariantItemViewModel> variants))
-            {
-                Variants = new List<VariantItemViewModel>(variants);
-            }
+            CalculateCharacteristics();
+        }
 
+        private void CalculateCharacteristics()
+        {
             var sortedDataset = InitialDataset.OrderBy(u => u).ToList();
 
             Characteristics = new ObservableCollection<QuantitativeCharacteristicItemViewModel>
@@ -73,7 +71,7 @@ namespace EMPILab1.ViewModels
                     Name = "Среднее арифметическое",
                     Value = MathHelpers.Mean(sortedDataset).ToString(),
                     StandardDeviation = MathHelpers.MeanStandardError(sortedDataset).ToString(),
-                    ConfidenceInterval = MathHelpers.MeanConfidenceInterval(ALPHA, sortedDataset).ToString(), 
+                    ConfidenceInterval = MathHelpers.MeanConfidenceInterval(ALPHA, sortedDataset).ToString(),
                 },
                 new QuantitativeCharacteristicItemViewModel
                 {
@@ -132,10 +130,16 @@ namespace EMPILab1.ViewModels
             var prms = new NavigationParameters
             {
                 { nameof(List<double>), InitialDataset },
-                { nameof(Variants), Variants },
             };
 
             return NavigationService.NavigateAsync(nameof(Task7), prms);
+        }
+
+        private void OnInitialDatasetChanged(List<double> newDataset)
+        {
+            InitialDataset = new List<double>(newDataset);
+
+            CalculateCharacteristics();
         }
 
         #endregion

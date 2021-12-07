@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EMPILab1.Events;
 using EMPILab1.Extensions;
 using EMPILab1.Models;
 using EMPILab1.Pages;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
 using Xamarin.Essentials;
 
@@ -14,9 +17,11 @@ namespace EMPILab1.ViewModels
     public class Tasks12ViewModel : BaseViewModel
     {
         public Tasks12ViewModel(
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IEventAggregator eventAggregator)
             : base(navigationService)
         {
+            eventAggregator.GetEvent<InitialDatasetChanged>().Subscribe(OnInitialDatasetChanged);
         }
 
         #region -- Public properties --
@@ -59,9 +64,14 @@ namespace EMPILab1.ViewModels
 
         #region -- Overrides --
 
-        public override void Initialize(INavigationParameters parameters)
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
         {
-            base.Initialize(parameters);
+            base.OnPropertyChanged(args);
+
+            if (args.PropertyName == nameof(InitialDataset))
+            {
+                Variants = new(InitialDataset.ToVariantsList());
+            }
         }
 
         #endregion
@@ -139,6 +149,11 @@ namespace EMPILab1.ViewModels
             }
 
             return valuesList;
+        }
+
+        private void OnInitialDatasetChanged(List<double> newDataset)
+        {
+            InitialDataset = new List<double>(newDataset);
         }
 
         #endregion

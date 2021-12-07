@@ -1,27 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using EMPILab1.Events;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
+using Prism.Services;
 
 namespace EMPILab1.ViewModels
 {
     public class Task7ViewModel : BaseViewModel
     {
+        private readonly IPageDialogService _pageDialogService;
+        private readonly IEventAggregator _eventAggregator;
+
         private readonly double _errorForAnomalies = 0.01;
         private double _lowBorder;
         private double _upBorder;
 
-        public Task7ViewModel(INavigationService navigationService)
+        public Task7ViewModel(
+            INavigationService navigationService,
+            IPageDialogService pageDialogService,
+            IEventAggregator eventAggregator)
             : base(navigationService)
         {
+            _pageDialogService = pageDialogService;
+            _eventAggregator = eventAggregator;
         }
 
         #region -- Public properties --
+
+        public List<ScatterPointViewModel> Anomalies { get; set; }
 
         private PlotModel _scatterPlotModel;
         public PlotModel ScatterPlotModel
@@ -37,6 +53,9 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _initialDataset, value);
         }
 
+        private ICommand _deleteAnomaliesCommand;
+        public ICommand DeleteAnomaliesCommand => _deleteAnomaliesCommand ??= new DelegateCommand(async () => await OnDeleteAnomaliesCommand());
+
         #endregion
 
         #region -- Overrides --
@@ -50,29 +69,7 @@ namespace EMPILab1.ViewModels
                 InitialDataset = new List<double>(dataset);
             }
 
-            var anomalies = CalculateAnomalies(InitialDataset, _errorForAnomalies);
-
-            var normalPoints = new List<ScatterPointViewModel>();
-            for (int i = 0; i < InitialDataset.Count(); i++)
-            {
-                if (!anomalies.Any(a => a.Value == InitialDataset[i]))
-                {
-                    normalPoints.Add(new ScatterPointViewModel
-                    {
-                        Index = i,
-                        Value = InitialDataset[i],
-                    });
-                }
-            }
-
-            if (anomalies.Any())
-            {
-                ScatterPlotModel = CalculateScatterModel(normalPoints, anomalies);
-            }
-            else
-            {
-                ScatterPlotModel = CalculateScatterModel(normalPoints);
-            }
+            UpdateAnomaliesAndScatterModel();
         }
 
         #endregion
@@ -104,6 +101,57 @@ namespace EMPILab1.ViewModels
             }
 
             return anomalies;
+        }
+
+        private async Task OnDeleteAnomaliesCommand()
+        {
+            var hasAnomalies = Anomalies != null && Anomalies.Any();
+
+            if (hasAnomalies)
+            {
+                var agreed = await _pageDialogService.DisplayAlertAsync("УДАЛЕНИЕ АНОМАЛИЙ", "Точно хотите удалит аномалии?", "Да", "Нет");
+
+                if (agreed)
+                {
+                    var anomalies = Anomalies.Select(a => a.Value);
+                    InitialDataset.RemoveAll(val => anomalies.Contains(val));
+
+                    UpdateAnomaliesAndScatterModel();
+
+                    _eventAggregator.GetEvent<InitialDatasetChanged>().Publish(InitialDataset);
+                }
+            }
+            else
+            {
+                await _pageDialogService.DisplayAlertAsync("Аномалий не выявлено", "", "ok");
+            }
+        }
+
+        private void UpdateAnomaliesAndScatterModel()
+        {
+            Anomalies = CalculateAnomalies(InitialDataset, _errorForAnomalies);
+
+            var normalPoints = new List<ScatterPointViewModel>();
+            for (int i = 0; i < InitialDataset.Count(); i++)
+            {
+                if (!Anomalies.Any(a => a.Value == InitialDataset[i]))
+                {
+                    normalPoints.Add(new ScatterPointViewModel
+                    {
+                        Index = i,
+                        Value = InitialDataset[i],
+                    });
+                }
+            }
+
+            if (Anomalies.Any())
+            {
+                ScatterPlotModel = CalculateScatterModel(normalPoints, Anomalies);
+            }
+            else
+            {
+                ScatterPlotModel = CalculateScatterModel(normalPoints);
+            }
         }
 
         private PlotModel CalculateScatterModel(List<ScatterPointViewModel> normalPoints, List<ScatterPointViewModel> anomalies = null)

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using EMPILab1.Events;
+using EMPILab1.Extensions;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
 using EMPILab1.Pages;
@@ -11,14 +14,19 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Navigation;
 
 namespace EMPILab1.ViewModels
 {
     public class Tasks345ViewModel : BaseViewModel
     {
-        public Tasks345ViewModel(INavigationService navigationService) : base(navigationService)
+        public Tasks345ViewModel(
+            INavigationService navigationService,
+            IEventAggregator eventAggregator)
+            : base(navigationService)
         {
+            eventAggregator.GetEvent<InitialDatasetChanged>().Subscribe(OnInitialDatasetChanged);
         }
 
         #region -- Public properties --
@@ -104,6 +112,23 @@ namespace EMPILab1.ViewModels
             HistogramModel = GetClassesChartModel();
         }
 
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.PropertyName == nameof(InitialDataset))
+            {
+                Variants = new(InitialDataset.ToVariantsList());
+
+                var optimalClassCount = GetOptimalClassCount();
+                var classes = SplitOnClasses(optimalClassCount);
+
+                ClassesAmount = optimalClassCount.ToString();
+                Classes = new(classes);
+                HistogramModel = GetClassesChartModel();
+            }
+        }
+
         #endregion
 
         #region -- Private helpers --
@@ -113,7 +138,6 @@ namespace EMPILab1.ViewModels
             var prms = new NavigationParameters
             {
                 { nameof(List<double>), InitialDataset },
-                { nameof(Variants), Variants },
             };
 
             return NavigationService.NavigateAsync(nameof(Task6), prms);
@@ -238,6 +262,11 @@ namespace EMPILab1.ViewModels
             }
 
             return result;
+        }
+
+        private void OnInitialDatasetChanged(List<double> newDataset)
+        {
+            InitialDataset = new List<double>(newDataset);
         }
 
         #endregion
