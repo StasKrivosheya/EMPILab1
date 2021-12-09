@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using EMPILab1.Extensions;
+using EMPILab1.Pages;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Prism.Commands;
 using Prism.Navigation;
 
 namespace EMPILab1.ViewModels
@@ -39,6 +43,9 @@ namespace EMPILab1.ViewModels
             get => _propbabilityPapperModel;
             set => SetProperty(ref _propbabilityPapperModel, value);
         }
+
+        private ICommand _continueCommand;
+        public ICommand ContinueCommand => _continueCommand ??= new DelegateCommand(async () => await OnContinueCommandAsync());
 
         #endregion
 
@@ -119,6 +126,16 @@ namespace EMPILab1.ViewModels
             plotModel.Series.Add(scatterSeries);
 
             return plotModel;
+        }
+
+        private Task OnContinueCommandAsync()
+        {
+            var prms = new NavigationParameters
+            {
+                { nameof(List<double>), InitialDataset },
+            };
+
+            return NavigationService.NavigateAsync(nameof(Task8Subtasks), prms);
         }
 
         #endregion

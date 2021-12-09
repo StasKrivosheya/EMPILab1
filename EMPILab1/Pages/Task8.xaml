@@ -5,12 +5,24 @@
              x:Class="EMPILab1.Pages.Task8"
              Title="Ідентифікація розподілу">
 
-    <StackLayout>
+     <ContentPage.ToolbarItems>
 
-        <forms:PlotView Model="{Binding PropbabilityPaperModel}"
-                        VerticalOptions="FillAndExpand"
-                        HorizontalOptions="FillAndExpand"/>
+        <ToolbarItem Command="{Binding ContinueCommand}"                                     
+                     Text="Дальше"
+                     Order="Primary"/>
 
-    </StackLayout>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <StackLayout>
+
+           <forms:PlotView Model="{Binding PropbabilityPaperModel}"
+                           VerticalOptions="FillAndExpand"
+                           HorizontalOptions="FillAndExpand"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
     
 </ContentPage>

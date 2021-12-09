@@ -342,5 +342,23 @@ namespace EMPILab1.Helpers
         }
 
         #endregion
+
+        #region -- Recovered Implerical distribution and density functions for Exponential distribution (task 8.2) --
+
+        public static double ImplericalFuncExponential(double x, double lambda)
+        {
+            return x < 0
+                ? 0d
+                : 1 - Math.Exp(-lambda * x);
+        }
+
+        public static double DensityFuncForExponential(double x, double lambda)
+        {
+            return x < 0
+                ? 0d
+                : lambda * Math.Exp(-lambda * x);
+        }
+
+        #endregion
     }
 }

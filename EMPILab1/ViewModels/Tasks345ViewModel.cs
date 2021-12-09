@@ -10,6 +10,7 @@ using EMPILab1.Extensions;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
 using EMPILab1.Pages;
+using EMPILab1.Services;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -21,11 +22,16 @@ namespace EMPILab1.ViewModels
 {
     public class Tasks345ViewModel : BaseViewModel
     {
+        private readonly IRuntimeStorage _runtimeStorage;
+
         public Tasks345ViewModel(
             INavigationService navigationService,
-            IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator,
+            IRuntimeStorage runtimeStorage)
             : base(navigationService)
         {
+            _runtimeStorage = runtimeStorage;
+
             eventAggregator.GetEvent<InitialDatasetChanged>().Subscribe(OnInitialDatasetChanged);
         }
 
@@ -109,7 +115,7 @@ namespace EMPILab1.ViewModels
 
             ClassesAmount = optimalClassCount.ToString();
             Classes = new(classes);
-            HistogramModel = GetClassesChartModel();
+            _runtimeStorage.HistogramModel = HistogramModel = GetClassesChartModel();
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs args)
@@ -125,7 +131,7 @@ namespace EMPILab1.ViewModels
 
                 ClassesAmount = optimalClassCount.ToString();
                 Classes = new(classes);
-                HistogramModel = GetClassesChartModel();
+                _runtimeStorage.HistogramModel = HistogramModel = GetClassesChartModel();
             }
         }
 
@@ -150,7 +156,7 @@ namespace EMPILab1.ViewModels
                 var classes = SplitOnClasses(number);
 
                 Classes = new(classes);
-                HistogramModel = GetClassesChartModel();
+                _runtimeStorage.HistogramModel = HistogramModel = GetClassesChartModel();
             }
         }
 
@@ -158,7 +164,7 @@ namespace EMPILab1.ViewModels
         {
             var minVal = Variants.AsQueryable().Min(v => v.Value);
             var maxVal = Variants.AsQueryable().Max(v => v.Value);
-            var h = ClassWidth = Math.Round((maxVal - minVal) / classCount, 4, MidpointRounding.AwayFromZero);
+            var h = _runtimeStorage.ClassWidth = ClassWidth = Math.Round((maxVal - minVal) / classCount, 4, MidpointRounding.AwayFromZero);
 
             var classes = new List<ClassViewModel>();
 

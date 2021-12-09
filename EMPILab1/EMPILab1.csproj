@@ -33,6 +33,7 @@
     <None Remove="FormulasAndReferences\" />
     <None Remove="Extensions\" />
     <None Remove="Events\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
@@ -43,5 +44,6 @@
     <Folder Include="FormulasAndReferences\" />
     <Folder Include="Extensions\" />
     <Folder Include="Events\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
