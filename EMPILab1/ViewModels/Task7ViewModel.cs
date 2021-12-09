@@ -5,6 +5,7 @@ using System.Windows.Input;
 using EMPILab1.Events;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
+using EMPILab1.Pages;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
@@ -52,6 +53,9 @@ namespace EMPILab1.ViewModels
             get => _initialDataset;
             set => SetProperty(ref _initialDataset, value);
         }
+
+        private ICommand _continueCommand;
+        public ICommand ContinueCommand => _continueCommand ??= new DelegateCommand(async () => await OnContinueCommandAsync());
 
         private ICommand _deleteAnomaliesCommand;
         public ICommand DeleteAnomaliesCommand => _deleteAnomaliesCommand ??= new DelegateCommand(async () => await OnDeleteAnomaliesCommand());
@@ -220,6 +224,16 @@ namespace EMPILab1.ViewModels
             scatterModel.Annotations.Add(LineLow);
 
             return scatterModel;
+        }
+
+        private Task OnContinueCommandAsync()
+        {
+            var prms = new NavigationParameters
+            {
+                { nameof(List<double>), InitialDataset },
+            };
+
+            return NavigationService.NavigateAsync(nameof(Task8), prms);
         }
 
         #endregion

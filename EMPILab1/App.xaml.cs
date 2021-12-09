@@ -40,6 +40,7 @@ namespace EMPILab1
             containerRegistry.RegisterForNavigation<Tasks345, Tasks345ViewModel>();
             containerRegistry.RegisterForNavigation<Task6, Task6ViewModel>();
             containerRegistry.RegisterForNavigation<Task7, Task7ViewModel>();
+            containerRegistry.RegisterForNavigation<Task8, Task8ViewModel>();
         }
     }
 }

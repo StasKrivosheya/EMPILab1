@@ -9,6 +9,10 @@
 
         <ToolbarItem Command="{Binding DeleteAnomaliesCommand}"                                     
                      Text="Удалить аномалии"
+                     Order="Primary" />
+
+        <ToolbarItem Command="{Binding ContinueCommand}"                                     
+                     Text="Дальше"
                      Order="Primary"/>
 
     </ContentPage.ToolbarItems>
