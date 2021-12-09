@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
              x:Class="EMPILab1.Pages.Task8Subtasks"
              Title="Оценки парматеров экспоненц. функции распределени">
 
-    <StackLayout>
+    <Grid RowDefinitions="0.1*, 0.9*">
 
-        <CollectionView ItemsSource="{Binding ParametersEstimations}">
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding ParametersEstimations}"
+                        VerticalOptions="Start">
 
                 <CollectionView.Header>
 
@@ -126,12 +129,85 @@
 
         </CollectionView>
 
-        <oxy:PlotView Model="{Binding NewHistogramModel}"
-                      BackgroundColor="AliceBlue"
-                      HeightRequest="1000"
-                      VerticalOptions="FillAndExpand"
-                      HorizontalOptions="FillAndExpand"/>
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto, 0.75*">
 
-    </StackLayout>
+            <StackLayout Grid.Row="0"
+                         Orientation="Horizontal">
+
+                <Button Text="Відновл. ф. щільності"
+                        Command="{Binding ShowDensityCommand}"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="Black"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"/>
+
+                <Button Text="Відновл. ф. розподілу"
+                        Command="{Binding ShowDistributionCommand}"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="Black"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"/>
+
+                <Button Text="Лінеаризов. ф. розподілу"
+                        Command="{Binding ShowLinearCommand}"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="Black"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"/>
+
+                <Button Text="Вірогідність відновл. розп."
+                        Command="{Binding ShowReliabilityCommand}"
+                        BackgroundColor="WhiteSmoke"
+                        BorderColor="Black"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        BorderWidth="1"
+                        Margin="20"
+                        Padding="10"/>
+
+            </StackLayout>
+
+            <oxy:PlotView Grid.Row="1"
+                          Model="{Binding DensityModel}"
+                          HeightRequest="600"
+                          BackgroundColor="AliceBlue"
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand"
+                          IsVisible="{Binding IsDensityModelVisible}"/>
+
+            <oxy:PlotView Grid.Row="1"
+                          Model="{Binding DistributionModel}"
+                          HeightRequest="600"
+                          BackgroundColor="AliceBlue"
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand"
+                          IsVisible="{Binding IsDistributionModelVisible}"/>
+
+            <oxy:PlotView Grid.Row="1"
+                          Model="{Binding LinearModel}"
+                          HeightRequest="600"
+                          BackgroundColor="AliceBlue"
+                          VerticalOptions="FillAndExpand"
+                          HorizontalOptions="FillAndExpand"
+                          IsVisible="{Binding IsLinearModelVisible}"/>
+
+            <StackLayout Grid.Row="1"
+                         IsVisible="{Binding IsReliabilityVisible}">
+
+            </StackLayout>
+
+        </Grid>
+
+    </Grid>
     
 </ContentPage>

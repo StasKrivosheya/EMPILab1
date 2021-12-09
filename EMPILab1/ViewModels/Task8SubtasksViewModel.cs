@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using EMPILab1.Extensions;
 using EMPILab1.Helpers;
 using EMPILab1.Models;
 using EMPILab1.Services;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Prism.Commands;
 using Prism.Navigation;
 
 namespace EMPILab1.ViewModels
@@ -15,6 +18,8 @@ namespace EMPILab1.ViewModels
     public class Task8SubtasksViewModel : BaseViewModel
     {
         private const double ALPHA = 0.05;
+
+        private double _lambdaPointEstimate;
 
         private readonly IRuntimeStorage _runtimeStorage;
 
@@ -28,11 +33,55 @@ namespace EMPILab1.ViewModels
 
         #region -- Public properties --
 
-        private PlotModel _newHistogramModel;
-        public PlotModel NewHistogramModel
+        private PlotModel _densityModel;
+        public PlotModel DensityModel
         {
-            get => _newHistogramModel;
-            set => SetProperty(ref _newHistogramModel, value);
+            get => _densityModel;
+            set => SetProperty(ref _densityModel, value);
+        }
+
+        private bool _isDensityModelVisible = true;
+        public bool IsDensityModelVisible
+        {
+            get => _isDensityModelVisible;
+            set => SetProperty(ref _isDensityModelVisible, value);
+        }
+
+        private PlotModel _distributionModel;
+        public PlotModel DistributionModel
+        {
+            get => _distributionModel;
+            set => SetProperty(ref _distributionModel, value);
+        }
+
+        private bool _isDistributionModelVisible;
+        public bool IsDistributionModelVisible
+        {
+            get => _isDistributionModelVisible;
+            set => SetProperty(ref _isDistributionModelVisible, value);
+        }
+
+        private PlotModel _linearModel;
+        public PlotModel LinearModel
+        {
+            get => _linearModel;
+            set => SetProperty(ref _linearModel, value);
+        }
+
+        private bool _isLinearModelVisible;
+        public bool IsLinearModelVisible
+        {
+            get => _isLinearModelVisible;
+            set => SetProperty(ref _isLinearModelVisible, value);
+        }
+
+        //
+
+        private bool _isReliabilityVisible;
+        public bool IsReliabilityVisible
+        {
+            get => _isReliabilityVisible;
+            set => SetProperty(ref _isReliabilityVisible, value);
         }
 
         private List<double> _initialDataset = new();
@@ -49,6 +98,18 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _parametersEstimations, value);
         }
 
+        private ICommand _ShowDensityCommand;
+        public ICommand ShowDensityCommand => _ShowDensityCommand ??= new DelegateCommand(OnShowDensityCommand);
+
+        private ICommand _ShowDistributionCommand;
+        public ICommand ShowDistributionCommand => _ShowDistributionCommand ??= new DelegateCommand(OnShowDistributionCommand);
+
+        private ICommand _ShowLinearCommand;
+        public ICommand ShowLinearCommand => _ShowLinearCommand ??= new DelegateCommand(OnShowLinearCommand);
+
+        private ICommand _ShowReliabilityCommand;
+        public ICommand ShowReliabilityCommand => _ShowReliabilityCommand ??= new DelegateCommand(OnShowReliabilityCommand);
+
         #endregion
 
         #region -- Overrides --
@@ -64,7 +125,12 @@ namespace EMPILab1.ViewModels
 
             EstimateParameters(ALPHA);
 
-            NewHistogramModel = CalculateModelForRenewedDensityFunction(_runtimeStorage.HistogramModel);
+            DensityModel = GetModelForRenewedDensityFunction(_runtimeStorage.HistogramModel);
+
+            DistributionModel = GetModelForRenewedDistributionFunction();
+
+            LinearModel = GetProbabilityPaperModel();
+            AddLinearDistrFuncToProbabilityPaperModel();
         }
 
         #endregion
@@ -77,7 +143,7 @@ namespace EMPILab1.ViewModels
             // рассчеты см в ../FormulasAndReferences/Calculations.jpeg
 
             // согласно рассчетам, имеем точечную оценку лямбда и ее сред.кв.отклон:
-            var lambda_ = 1 / InitialDataset.Average();
+            var lambda_ = _lambdaPointEstimate = 1 / InitialDataset.Average();
             var stdDevLambda_ = Math.Pow(lambda_, 2) / InitialDataset.Count;
 
             // 1.96
@@ -99,7 +165,7 @@ namespace EMPILab1.ViewModels
             };
         }
 
-        private PlotModel CalculateModelForRenewedDensityFunction(PlotModel histogramModel)
+        private PlotModel GetModelForRenewedDensityFunction(PlotModel histogramModel)
         {
             var plotModel = new PlotModel
             {
@@ -153,13 +219,12 @@ namespace EMPILab1.ViewModels
                 Color = OxyColor.Parse("#FF0000")
             };
 
-            var xs = GetXs(1000);
+            var xs = MathHelpers.GetXs(InitialDataset, 1000);
 
             foreach (var x in xs)
             {
                 lineSeries.Points.Add(
-                    new DataPoint(x,
-                        MathHelpers.DensityFuncForExponential(x, ParametersEstimations.FirstOrDefault().Value) * _runtimeStorage.ClassWidth));
+                    new DataPoint(x, MathHelpers.DensityFuncForExponential(x, ParametersEstimations.FirstOrDefault().Value) * _runtimeStorage.ClassWidth));
             }
 
             plotModel.Series.Add(lineSeries);
@@ -167,21 +232,162 @@ namespace EMPILab1.ViewModels
             return plotModel;
         }
 
-        private List<double> GetXs(int count)
+        private PlotModel GetModelForRenewedDistributionFunction()
         {
-            var min = InitialDataset.Min();
-            var max = InitialDataset.Max();
-
-            double step = (max - min) / count;
-
-            var result = new List<double>();
-
-            for (var i = min; i <= max; i += step)
+            var plotModel = new PlotModel
             {
-                result.Add(i);
+                Title = "Restored distribution function"
+            };
+
+            var xAxis = new LinearAxis
+            {
+                Title = "value",
+                Position = AxisPosition.Bottom,
+                LabelFormatter = (param) => Math.Round(param, 3).ToString()
+            };
+            plotModel.Axes.Add(xAxis);
+
+            var yAxis = new LinearAxis
+            {
+                Title = "EmpFunctionResult",
+                Position = AxisPosition.Left
+            };
+            plotModel.Axes.Add(yAxis);
+
+            var variants = InitialDataset.ToVariantsList();
+            var stepSeries = new StairStepSeries();
+            foreach (var v in variants)
+            {
+                stepSeries.Points.Add(new DataPoint(v.Value, v.EmpiricalDistrFuncValue));
             }
 
-            return result;
+            var xs = MathHelpers.GetXs(InitialDataset, 1000);
+            var distributionFunc = new LineSeries();
+            foreach (var x in xs)
+            {
+                distributionFunc.Points.Add(new DataPoint(x, MathHelpers.ImplericalFuncExponential(x, ParametersEstimations.FirstOrDefault().Value)));
+            }
+
+            plotModel.Series.Add(stepSeries);
+            plotModel.Series.Add(distributionFunc);
+
+            return plotModel;
+        }
+
+        private void AddLinearDistrFuncToProbabilityPaperModel()
+        {
+            var linearSeries = new LineSeries
+            {
+                Title = "Restored distribution function"
+            };
+
+            var xs = MathHelpers.GetXs(InitialDataset, 1000);
+
+            foreach (var x in xs)
+            {
+                linearSeries.Points
+                    .Add(new DataPoint(x,
+                        Math.Log(1 / (1 - MathHelpers.ImplericalFuncExponential(x, _lambdaPointEstimate)))));
+            }
+
+            LinearModel.Series.Add(linearSeries);
+        }
+
+        // hack: copy pase from previous viewmodel
+        private List<Tuple<double, double>> GetNewCoordinates()
+        {
+            var newCoordinates = new List<Tuple<double, double>>();
+
+            var variants = InitialDataset.ToVariantsList();
+
+            foreach (var x in InitialDataset)
+            {
+                var t = x;
+                var fx = variants.Find(v => v.Value == x).EmpiricalDistrFuncValue;
+                var diff = 1 - fx;
+
+                if (diff > 0)
+                {
+                    var z = -Math.Log(diff);
+
+                    newCoordinates.Add(new Tuple<double, double>(t, z));
+                }
+            }
+
+            return newCoordinates;
+        }
+
+        private PlotModel GetProbabilityPaperModel()
+        {
+            var newCoordinates = GetNewCoordinates();
+
+            var plotModel = new PlotModel
+            {
+                Title = "Вероятностная бумага (экспоненц. распр.)"
+            };
+
+            var xAxis = new LinearAxis
+            {
+                Title = "t",
+                Position = AxisPosition.Bottom,
+                LabelFormatter = (param) => Math.Round(param, 3).ToString(),
+                Minimum = newCoordinates.Select(u => u.Item1).Min(),
+                Maximum = newCoordinates.Select(u => u.Item1).Max(),
+            };
+            plotModel.Axes.Add(xAxis);
+
+            var yAxis = new LinearAxis
+            {
+                Title = "z",
+                Position = AxisPosition.Left,
+                Minimum = newCoordinates.Select(u => u.Item2).Min(),
+                Maximum = newCoordinates.Select(u => u.Item2).Max(),
+            };
+            plotModel.Axes.Add(yAxis);
+
+            var scatterSeries = new ScatterSeries();
+
+            foreach (var point in newCoordinates)
+            {
+                scatterSeries.Points.Add(new ScatterPoint(point.Item1, point.Item2, 1));
+            }
+
+            plotModel.Series.Add(scatterSeries);
+
+            return plotModel;
+        }
+
+        // hack: quick solution
+        private void OnShowDensityCommand()
+        {
+            IsDensityModelVisible = true;
+            IsDistributionModelVisible = false;
+            IsLinearModelVisible = false;
+            IsReliabilityVisible = false;
+        }
+
+        private void OnShowDistributionCommand()
+        {
+            IsDensityModelVisible = false;
+            IsDistributionModelVisible = true;
+            IsLinearModelVisible = false;
+            IsReliabilityVisible = false;
+        }
+
+        private void OnShowLinearCommand()
+        {
+            IsDensityModelVisible = false;
+            IsDistributionModelVisible = false;
+            IsLinearModelVisible = true;
+            IsReliabilityVisible = false;
+        }
+
+        private void OnShowReliabilityCommand()
+        {
+            IsDensityModelVisible = false;
+            IsDistributionModelVisible = false;
+            IsLinearModelVisible = false;
+            IsReliabilityVisible = true;
         }
 
         #endregion

@@ -359,6 +359,23 @@ namespace EMPILab1.Helpers
                 : lambda * Math.Exp(-lambda * x);
         }
 
+        public static List<double> GetXs(List<double> x,int count)
+        {
+            var min = x.Min();
+            var max = x.Max();
+
+            double step = (max - min) / count;
+
+            var result = new List<double>();
+
+            for (var i = min; i <= max; i += step)
+            {
+                result.Add(i);
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }
