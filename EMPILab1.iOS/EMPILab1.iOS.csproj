@@ -134,6 +134,9 @@
     <PackageReference Include="Syncfusion.Xamarin.SfAutoComplete">
       <Version>19.3.0.43</Version>
     </PackageReference>
+    <PackageReference Include="OxyPlot.Xamarin.Forms">
+      <Version>1.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

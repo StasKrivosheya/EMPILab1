@@ -23,6 +23,7 @@ namespace EMPILab1.iOS
             global::Xamarin.Forms.Forms.Init();
 
             Syncfusion.SfChart.XForms.iOS.Renderers.SfChartRenderer.Init();
+            OxyPlot.Xamarin.Forms.Platform.iOS.PlotViewRenderer.Init();
 
             LoadApplication(new App(new AndroidInitializer()));
 

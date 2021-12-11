@@ -16,6 +16,7 @@ namespace EMPILab1.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
 
             LoadApplication(new App(new iOSInitializer()));
         }

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
+             x:Class="EMPILab1.Pages.Task8"
+             Title="Ідентифікація розподілу">
+
+     <ContentPage.ToolbarItems>
+
+        <ToolbarItem Command="{Binding ContinueCommand}"                                     
+                     Text="Дальше"
+                     Order="Primary"/>
+
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <StackLayout>
+
+           <forms:PlotView Model="{Binding PropbabilityPaperModel}"
+                           VerticalOptions="FillAndExpand"
+                           HorizontalOptions="FillAndExpand"/>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+    
+</ContentPage>
