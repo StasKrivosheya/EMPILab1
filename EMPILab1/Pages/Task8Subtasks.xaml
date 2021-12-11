@@ -202,7 +202,34 @@
                           IsVisible="{Binding IsLinearModelVisible}"/>
 
             <StackLayout Grid.Row="1"
-                         IsVisible="{Binding IsReliabilityVisible}">
+                         IsVisible="{Binding IsReliabilityVisible}"
+                         HorizontalOptions="CenterAndExpand"
+                         Padding="10">
+
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Chi Squared = "/>
+                            <Span Text="{Binding ChiSquared}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Chi Squared Critical = "/>
+                            <Span Text="{Binding ChiSquaredCritical}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Conclusion: "/>
+                            <Span Text="{Binding Conclusion}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
             </StackLayout>
 

@@ -75,7 +75,26 @@ namespace EMPILab1.ViewModels
             set => SetProperty(ref _isLinearModelVisible, value);
         }
 
-        //
+        private double _chiSquared;
+        public double ChiSquared
+        {
+            get => _chiSquared;
+            set => SetProperty(ref _chiSquared, value);
+        }
+
+        private double _chiSquaredCritical;
+        public double ChiSquaredCritical
+        {
+            get => _chiSquaredCritical;
+            set => SetProperty(ref _chiSquaredCritical, value);
+        }
+
+        private string _conclusion;
+        public string Conclusion
+        {
+            get => _conclusion;
+            set => SetProperty(ref _conclusion, value);
+        }
 
         private bool _isReliabilityVisible;
         public bool IsReliabilityVisible
@@ -131,6 +150,8 @@ namespace EMPILab1.ViewModels
 
             LinearModel = GetProbabilityPaperModel();
             AddLinearDistrFuncToProbabilityPaperModel();
+
+            PerformPearsonsChiSquaredTest();
         }
 
         #endregion
@@ -291,6 +312,32 @@ namespace EMPILab1.ViewModels
             }
 
             LinearModel.Series.Add(linearSeries);
+        }
+
+        private void PerformPearsonsChiSquaredTest()
+        {
+            var lambda = _lambdaPointEstimate; // get previously calculated lambda
+            var classes = _runtimeStorage.Classes.ToList(); // get previously calculated classes
+            var N = InitialDataset.Count;
+            var M = classes.Count;
+
+            // calculating theoretical frequency
+            foreach (var c in classes)
+            {
+                var pTheoretical =
+                    MathHelpers.ImplericalFuncExponential(c.Bounds.Item2, lambda)
+                    - MathHelpers.ImplericalFuncExponential(c.Bounds.Item1, lambda);
+
+                c.TheoreticalFrequency = N * pTheoretical;
+            }
+
+            ChiSquared = MathHelpers.GetChiSquared(classes);
+
+            ChiSquaredCritical = MathHelpers.QuantileP(1 - ALPHA, M - 1);
+
+            Conclusion = ChiSquared <= ChiSquaredCritical
+                ? "Розподіл вірогідний"
+                : "Розподіл невірогідний";
         }
 
         // hack: copy pase from previous viewmodel

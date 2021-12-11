@@ -40,6 +40,13 @@ namespace EMPILab1.Models
             set => SetProperty(ref _frequency, value);
         }
 
+        private double _theoreticalFrequency;
+        public double TheoreticalFrequency
+        {
+            get => _theoreticalFrequency;
+            set => SetProperty(ref _theoreticalFrequency, value);
+        }
+
         private double _relativeFrequency;
         public double RelativeFrequency
         {

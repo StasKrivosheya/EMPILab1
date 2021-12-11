@@ -133,6 +133,11 @@ namespace EMPILab1.ViewModels
                 Classes = new(classes);
                 _runtimeStorage.HistogramModel = HistogramModel = GetClassesChartModel();
             }
+
+            if (args.PropertyName == nameof(Classes))
+            {
+                _runtimeStorage.Classes = Classes;
+            }
         }
 
         #endregion

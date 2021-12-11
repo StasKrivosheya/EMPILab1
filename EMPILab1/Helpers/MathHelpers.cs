@@ -377,5 +377,32 @@ namespace EMPILab1.Helpers
         }
 
         #endregion
+
+        #region -- Pearson's chi-squared test (task 8.3)
+
+        public static double GetChiSquared(IEnumerable<ClassViewModel> classes)
+        {
+            var result = 0d;
+
+            foreach (var c in classes)
+            {
+                result += Math.Pow(c.Frequency - c.TheoreticalFrequency, 2) / c.TheoreticalFrequency;
+            }
+
+            return result;
+        }
+
+        public static double QuantileP(double p, double v)
+        {
+            var result = v;
+
+            var secondMultiplier = 1 - (2 / (9 * v)) + (QuantileU(p) * Math.Sqrt(2 / (9 * v)));
+
+            result *= Math.Pow(secondMultiplier, 3);
+
+            return result;
+        }
+
+        #endregion
     }
 }
